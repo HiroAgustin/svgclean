@@ -17,10 +17,13 @@
   "author": {
     "name": "Agustin Diaz",
     "url": "https://github.com/HiroAgustin"
-  }
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/HiroAgustin/svgclean/issues"
   },
-  "homepage": "https://github.com/HiroAgustin/svgclean"
+  "homepage": "https://github.com/HiroAgustin/svgclean",
+  "dependencies": {
+    "sax": "^0.6.0"
+  }
 }
