@@ -2,28 +2,40 @@
   "name": "svgclean",
   "version": "0.1.0",
   "description": "Removes useless tags from exported svg files.",
-  "main": "svgclean.js",
-  "scripts": {
-    "test": ""
+  "keywords": [
+    "svg",
+    "clean"
+  ],
+  "homepage": "https://github.com/HiroAgustin/svgclean",
+  "bugs": {
+    "url": "https://github.com/HiroAgustin/svgclean/issues",
+    "email": "hiroagustin@gmail.com"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Agustin Diaz",
+    "email": "hiroagustin@gmail.com",
+    "url": "https://github.com/HiroAgustin"
+  },
+  "main": "./lib/svgclean.js",
+  "bin": {
+    "svgclean": "./bin/svgclean"
+  },
+  "directories": {
+    "bin": "./bin",
+    "lib": "./lib"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/HiroAgustin/svgclean.git"
   },
-  "keywords": [
-    "svg",
-    "clean"
-  ],
-  "author": {
-    "name": "Agustin Diaz",
-    "url": "https://github.com/HiroAgustin"
+  "scripts": {
+    "test": ""
   },
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/HiroAgustin/svgclean/issues"
-  },
-  "homepage": "https://github.com/HiroAgustin/svgclean",
   "dependencies": {
     "sax": "^0.6.0"
+  },
+  "engines": {
+    "node": "^0.10.0"
   }
 }
