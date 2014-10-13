@@ -6,63 +6,95 @@
   // {
     var writer = fs.createWriteStream(process.argv[3])
 
-      , printer = sax.createStream(false, {
+      , saxStream = sax.createStream(false, {
           lowercasetags: true
         , trim: true
         })
 
-      , inavlidTags = ['metadata', 'sfw', 'slices', 'slicesourcebounds']
+      , isInvalid = false
 
       , i = 0;
 
-    printer.level = 0;
+    saxStream.level = 0;
 
-    printer.indent = function indent ()
+    saxStream.isSelfClosing = function isSelfClosing (tag)
+    {
+      return !~['svg', 'g'].indexOf(tag);
+    };
+
+    saxStream.indent = function indent ()
     {
       for (i = 0; i < this.level; i++)
       {
-        writer.write('  ');
+        writer.write('\t');
       }
     };
 
-    printer.on('opentag', function (tag)
+    saxStream.on('opentag', function (tag)
     {
       var value = null
-        , attr = null;
+        , attr = null
+        , name = tag.name;
 
-      if (~inavlidTags.indexOf(tag.name))
+      if (isInvalid)
         return;
 
+      if (name === 'metadata')
+        return (isInvalid = true);
+
+      writer.write('\n');
       this.indent();
       this.level++;
 
-      writer.write('<' + tag.name);
+      writer.write('<' + name);
 
       for (attr in tag.attributes)
       {
-        value = tag.attributes[attr];
+        value = decodeURI(
+          encodeURI(tag.attributes[attr])
+          .replace(/%0D/gi, '')
+          .replace(/%0A/gi, '')
+          .replace(/%09/gi, '')
+        );
 
         if (!~attr.indexOf('xml') && !(attr === 'id' && value === 'Layer_1'))
           writer.write(' ' + attr + '="' + value + '"');
       }
 
-      writer.write('>\n');
+      if (this.isSelfClosing(name))
+        writer.write('/');
+
+      writer.write('>');
     });
 
-    printer.on('closetag', function (tag)
+    saxStream.on('closetag', function (tag)
     {
-      if (~inavlidTags.indexOf(tag))
+      if (tag === 'metadata')
+        return (isInvalid = false);
+
+      if (isInvalid)
         return;
 
       this.level--;
+
+      if (!this.isSelfClosing(tag))
+      {
+        writer.write('\n');
+        this.indent();
+        writer.write('</' + tag + '>');
+      }
+    });
+
+    saxStream.on('comment', function (comment)
+    {
       this.indent();
-      writer.write('</' + tag + '>\n');
+      writer.write('<!-- ' + comment + ' -->');
     });
 
     fs.createReadStream(path.join(process.cwd(), process.argv[2]), {
       encoding: 'utf8'
     })
-    .pipe(printer);
+    .pipe(saxStream);
   // };
 
 }(require('sax'), require('path'), require('fs')));
