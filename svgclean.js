@@ -22,11 +22,21 @@
       return !~['svg', 'g'].indexOf(tag);
     };
 
+    saxStream.engrave = function engrave (text)
+    {
+      return writer.write(text);
+    };
+
+    saxStream.nextLine = function nextLine ()
+    {
+      this.engrave('\n');
+    };
+
     saxStream.indent = function indent ()
     {
       for (i = 0; i < this.level; i++)
       {
-        writer.write('\t');
+        this.engrave('\t');
       }
     };
 
@@ -42,14 +52,17 @@
       if (name === 'metadata')
         return (isInvalid = true);
 
-      writer.write('\n');
+      this.nextLine();
       this.indent();
       this.level++;
 
-      writer.write('<' + name);
+      this.engrave('<' + name);
 
       for (attr in tag.attributes)
       {
+        if (~attr.indexOf('xml') || (attr === 'id' && value === 'Layer_1'))
+          continue;
+
         value = decodeURI(
           encodeURI(tag.attributes[attr])
           .replace(/%0D/gi, '')
@@ -57,14 +70,13 @@
           .replace(/%09/gi, '')
         );
 
-        if (!~attr.indexOf('xml') && !(attr === 'id' && value === 'Layer_1'))
-          writer.write(' ' + attr + '="' + value + '"');
+        this.engrave(' ' + attr + '="' + value + '"');
       }
 
       if (this.isSelfClosing(name))
-        writer.write('/');
+        this.engrave('/');
 
-      writer.write('>');
+      this.engrave('>');
     });
 
     saxStream.on('closetag', function (tag)
@@ -79,16 +91,16 @@
 
       if (!this.isSelfClosing(tag))
       {
-        writer.write('\n');
+        this.nextLine();
         this.indent();
-        writer.write('</' + tag + '>');
+        this.engrave('</' + tag + '>');
       }
     });
 
     saxStream.on('comment', function (comment)
     {
       this.indent();
-      writer.write('<!-- ' + comment + ' -->');
+      this.engrave('<!-- ' + comment + ' -->');
     });
 
     fs.createReadStream(path.join(process.cwd(), process.argv[2]), {
