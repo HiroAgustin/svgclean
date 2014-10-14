@@ -35,9 +35,6 @@
   "dependencies": {
     "sax": "^0.6.0"
   },
-  "files": [
-    "lib"
-  ],
   "engines": {
     "node": "^0.10.0"
   }
