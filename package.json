@@ -1,6 +1,6 @@
 {
   "name": "svgclean",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Removes useless tags from exported svg files.",
   "keywords": [
     "svg",
