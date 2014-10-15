@@ -1,6 +1,6 @@
 {
   "name": "svgclean",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Removes useless tags from exported svg files.",
   "keywords": [
     "svg",
@@ -33,6 +33,7 @@
     "test": ""
   },
   "dependencies": {
+    "mkdirp": "^0.5.0",
     "sax": "^0.6.0"
   },
   "engines": {
