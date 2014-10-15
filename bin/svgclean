@@ -1,3 +1,4 @@
 #!/usr/bin/env node
 
-require('../lib/svgclean')(process.argv[2], process.argv[3]);
+var SvgCleaner = require('../lib/svgclean');
+new SvgCleaner(process.argv[2], process.argv[3]);
