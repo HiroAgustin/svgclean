@@ -1,8 +1,8 @@
 #!/usr/bin/env node
-;(function (SvgCleaner)
+;(function (coa)
 {
   'use strict';
 
-  new SvgCleaner().clean(process.argv[2], process.argv[3]);
+  coa.run();
 
-}(require('../lib/svgclean')));
+}(require('../lib/coa')));
