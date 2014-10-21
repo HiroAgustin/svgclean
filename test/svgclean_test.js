@@ -87,21 +87,12 @@
       });
     });
 
-    it.skip('fails if src does not exists', function (done)
+    it('fails if src does not exists', function ()
     {
       var src = './fixtures/image-2.svg'
-        , dest = './fixtures/test/image-2.min.svg'
-        , cleaner = null;
+        , dest = './fixtures/test/image-2.min.svg';
 
-      assert.throws(function ()
-      {
-        cleaner = new Svgclean(src, dest);
-
-        cleaner.on('error', function ()
-        {
-          done();
-        });
-      }, Error);
+      assert.throws(new Svgclean(src, dest), Error);
     });
   });
 
