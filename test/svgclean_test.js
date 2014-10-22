@@ -1,4 +1,4 @@
-;(function (assert, fs, path, Svgclean)
+;(function (assert, fs, path, svgclean)
 {
   'use strict';
 
@@ -32,10 +32,9 @@
     {
       var src = './fixtures/image-1.svg'
         , dest = './fixtures/image-1.min.svg'
-        , expected = './expected/image-1.clean.svg'
-        , cleaner = new Svgclean(src, dest);
+        , expected = './expected/image-1.clean.svg';
 
-      cleaner.on('finish', function ()
+      svgclean(src, dest, function ()
       {
         fs.readFile(dest, {encoding: 'utf-8'}, function (error, destData)
         {
@@ -52,10 +51,9 @@
     {
       var src = './fixtures/image-1.svg'
         , dest = './fixtures/test/image-1.min.svg'
-        , expected = './expected/image-1.clean.svg'
-        , cleaner = new Svgclean(src, dest);
+        , expected = './expected/image-1.clean.svg';
 
-      cleaner.on('finish', function ()
+      svgclean(src, dest, function ()
       {
         fs.readFile(dest, {encoding: 'utf-8'}, function (error, destData)
         {
@@ -71,10 +69,9 @@
     it('compresses src if no dst option', function (done)
     {
       var src = './fixtures/image-1.svg'
-        , expected = './expected/image-1.clean.svg'
-        , cleaner = new Svgclean(src);
+        , expected = './expected/image-1.clean.svg';
 
-      cleaner.on('finish', function ()
+      svgclean(src, function ()
       {
         fs.readFile(src, {encoding: 'utf-8'}, function (error, destData)
         {
@@ -92,7 +89,7 @@
       var src = './fixtures/image-2.svg'
         , dest = './fixtures/test/image-2.min.svg';
 
-      assert.throws(new Svgclean(src, dest), Error);
+      assert.throws(svgclean(src, dest), Error);
     });
   });
 

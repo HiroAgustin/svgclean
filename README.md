@@ -23,17 +23,28 @@ From NPM for programmatic use:
 
 or
 
-`svgclean image.svg image.clean.svg`
+`svgclean image.svg image-clean.svg`
 
 ### As a Node.js module
 
-    ;(function (SvgClean)
-    {
-      var src = './fixtures/image-1.svg'
-        , dest = './fixtures/image-1.min.svg'
-        , cleaner = new Svgclean(src, dest);
+    var svgclean = require('svgclean');
 
-    }(require('svgclean')))
+    // Modify existing file
+    svgclean('image-1.svg');
+
+    // Create new file
+    svgclean('image-2.svg', 'image-2-clean.svg');
+
+    // Passing a callback
+    svgclean('image-3.svg', function ()
+    {
+      // Cleaning is done
+    });
+
+    svgclean('image-4.svg', 'image-4-clean.svg', function ()
+    {
+      // Cleaning is done
+    });
 
 ## License and copyrights
 
