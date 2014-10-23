@@ -1,7 +1,1 @@
-;(function (coa)
-{
-  'use strict';
-
-  coa.run();
-
-}(require('../lib/coa')));
+require('../lib/coa').run();
