@@ -1,1 +1,9 @@
-require('../lib/coa').run();
+#!/usr/bin/env node
+
+;(function (coa)
+{
+  'use strict';
+
+  coa.run();
+
+}(require('../lib/coa')));
