@@ -2,10 +2,23 @@
 {
   'use strict';
 
+  function readFileSync (route)
+  {
+    return fs.readFileSync(route, {encoding: 'utf-8'}).trim();
+  }
+
+  function compare (dest, expected, done)
+  {
+    assert.equal(readFileSync(dest), expected);
+
+    done();
+  }
+
   describe('svgclean', function ()
   {
     var src = './fixtures/image-1.svg'
-      , expected = fs.readFileSync('./expected/image-1.clean.svg').toString().trim();
+
+      , expected = readFileSync('./expected/image-1.clean.svg');
 
     after(function ()
     {
@@ -20,33 +33,19 @@
     {
       var dest = './fixtures/image-1.min.svg';
 
-      svgclean(src, dest, function ()
-      {
-        assert.equal(fs.readFileSync(dest).toString().trim(), expected);
-
-        done();
-      });
+      svgclean(src, dest, compare.bind(null, dest, expected, done));
     });
 
     it('creates the dest path if it doesn\'t exists', function (done)
     {
       var dest = './fixtures/test/image-1.min.svg';
 
-      svgclean(src, dest, function ()
-      {
-        assert.equal(fs.readFileSync(dest).toString().trim(), expected);
-
-        done();
-      });
+      svgclean(src, dest, compare.bind(null, dest, expected, done));
     });
 
     it('compresses src if no dst option', function (done)
     {
-      svgclean(src, function ()
-      {
-        assert.equal(fs.readFileSync(src).toString().trim(), expected);
-        done();
-      });
+      svgclean(src, compare.bind(null, src, expected, done));
     });
 
     it('fails if src does not exists', function ()
