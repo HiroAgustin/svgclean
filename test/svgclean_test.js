@@ -17,7 +17,6 @@
   describe('svgclean', function ()
   {
     var src = './fixtures/image-1.svg'
-
       , expected = readFileSync('./expected/image-1.clean.svg');
 
     after(function ()
