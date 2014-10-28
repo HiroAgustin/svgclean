@@ -6,26 +6,16 @@
   {
     after(function (done)
     {
-      fs.unlink('./fixtures/image-1.min.svg', function ()
-      {
-        fs.unlink('./fixtures/test/image-1.min.svg', function ()
-        {
-          fs.unlink('./fixtures/test/image-2.min.svg', function ()
-          {
-            fs.rmdir('./fixtures/test/', function ()
-            {
-              var readStream = fs.createReadStream('./fixtures/image-1-copy.svg')
-                , writeStream = fs.createWriteStream('./fixtures/image-1.svg');
+      fs.unlinkSync('./fixtures/image-1.min.svg');
+      fs.unlinkSync('./fixtures/test/image-1.min.svg');
+      fs.rmdirSync('./fixtures/test/');
 
-              readStream.on('error', done);
-              writeStream.on('error', done);
-              writeStream.on('close', done);
+      var readStream = fs.createReadStream('./fixtures/image-1-copy.svg')
+        , writeStream = fs.createWriteStream('./fixtures/image-1.svg');
 
-              readStream.pipe(writeStream);
-            });
-          });
-        });
-      });
+      writeStream.on('close', done);
+
+      readStream.pipe(writeStream);
     });
 
     it('cleans svg files', function (done)
