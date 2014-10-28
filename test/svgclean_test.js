@@ -6,14 +6,14 @@
   {
     after(function (done)
     {
-      fs.unlinkSync('./fixtures/image-1.min.svg');
-      fs.unlinkSync('./fixtures/test/image-1.min.svg');
-      fs.rmdirSync('./fixtures/test/');
-
       var readStream = fs.createReadStream('./fixtures/image-1-copy.svg')
         , writeStream = fs.createWriteStream('./fixtures/image-1.svg');
 
       writeStream.on('close', done);
+
+      fs.unlinkSync('./fixtures/image-1.min.svg');
+      fs.unlinkSync('./fixtures/test/image-1.min.svg');
+      fs.rmdirSync('./fixtures/test/');
 
       readStream.pipe(writeStream);
     });
