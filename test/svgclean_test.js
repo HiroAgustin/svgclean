@@ -52,7 +52,7 @@
     it('fails if src does not exists', function ()
     {
       assert.throws(
-        svgclean('./fixtures/image-2.svg', './fixtures/test/image-2.min.svg')
+        svgclean('./fixtures/image-2.svg', './fixtures/image-2.min.svg')
       , Error
       );
     });
