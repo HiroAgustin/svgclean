@@ -4,82 +4,57 @@
 
   describe('svgclean', function ()
   {
-    after(function (done)
+    var src = './fixtures/image-1.svg'
+      , expected = fs.readFileSync('./expected/image-1.clean.svg').toString().trim();
+
+    after(function ()
     {
-      var readStream = fs.createReadStream('./fixtures/image-1-copy.svg')
-        , writeStream = fs.createWriteStream('./fixtures/image-1.svg');
-
-      writeStream.on('close', done);
-
       fs.unlinkSync('./fixtures/image-1.min.svg');
       fs.unlinkSync('./fixtures/test/image-1.min.svg');
       fs.rmdirSync('./fixtures/test/');
 
-      readStream.pipe(writeStream);
+      fs.writeFileSync('./fixtures/image-1.svg', fs.readFileSync('./fixtures/image-1-copy.svg'));
     });
 
     it('cleans svg files', function (done)
     {
-      var src = './fixtures/image-1.svg'
-        , dest = './fixtures/image-1.min.svg'
-        , expected = './expected/image-1.clean.svg';
+      var dest = './fixtures/image-1.min.svg';
 
       svgclean(src, dest, function ()
       {
-        fs.readFile(dest, {encoding: 'utf-8'}, function (error, destData)
-        {
-          fs.readFile(expected, {encoding: 'utf-8'}, function (error, expectedData)
-          {
-            assert.equal(destData.trim(), expectedData.trim());
-            done();
-          });
-        });
+        assert.equal(fs.readFileSync(dest).toString().trim(), expected);
+
+        done();
       });
     });
 
     it('creates the dest path if it doesn\'t exists', function (done)
     {
-      var src = './fixtures/image-1.svg'
-        , dest = './fixtures/test/image-1.min.svg'
-        , expected = './expected/image-1.clean.svg';
+      var dest = './fixtures/test/image-1.min.svg';
 
       svgclean(src, dest, function ()
       {
-        fs.readFile(dest, {encoding: 'utf-8'}, function (error, destData)
-        {
-          fs.readFile(expected, {encoding: 'utf-8'}, function (error, expectedData)
-          {
-            assert.equal(destData.trim(), expectedData.trim());
-            done();
-          });
-        });
+        assert.equal(fs.readFileSync(dest).toString().trim(), expected);
+
+        done();
       });
     });
 
     it('compresses src if no dst option', function (done)
     {
-      var src = './fixtures/image-1.svg'
-        , expected = './expected/image-1.clean.svg';
-
       svgclean(src, function ()
       {
-        fs.readFile(src, {encoding: 'utf-8'}, function (error, destData)
-        {
-          fs.readFile(expected, {encoding: 'utf-8'}, function (error, expectedData)
-          {
-            assert.equal(destData.trim(), expectedData.trim());
-            done();
-          });
-        });
+        assert.equal(fs.readFileSync(src).toString().trim(), expected);
+        done();
       });
     });
 
     it('fails if src does not exists', function ()
     {
-      var src = './fixtures/image-2.svg'
-        , dest = './fixtures/test/image-2.min.svg';
-
-      assert.throws(svgclean(src, dest), Error);
+      assert.throws(
+        svgclean('./fixtures/image-2.svg', './fixtures/test/image-2.min.svg')
+      , Error
+      );
     });
   });
 
