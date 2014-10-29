@@ -2,6 +2,11 @@
 {
   'use strict';
 
+  function joinPath (route)
+  {
+    return path.join(path.relative(process.cwd(), __dirname), route);
+  }
+
   function readFileSync (route)
   {
     return fs.readFileSync(route, {encoding: 'utf-8'}).trim();
@@ -16,28 +21,31 @@
 
   describe('svgclean', function ()
   {
-    var src = './fixtures/image-1.svg'
-      , expected = readFileSync('./expected/image-1.clean.svg');
+    var src = joinPath('./fixtures/image-1.svg')
+      , expected = readFileSync(joinPath('./expected/image-1.clean.svg'));
 
     after(function ()
     {
-      fs.unlinkSync('./fixtures/image-1.min.svg');
-      fs.unlinkSync('./fixtures/test/image-1.min.svg');
-      fs.rmdirSync('./fixtures/test/');
+      fs.unlinkSync(joinPath('./fixtures/image-1.min.svg'));
+      fs.unlinkSync(joinPath('./fixtures/test/image-1.min.svg'));
+      fs.rmdirSync(joinPath('./fixtures/test/'));
 
-      fs.writeFileSync('./fixtures/image-1.svg', fs.readFileSync('./fixtures/image-1-copy.svg'));
+      fs.writeFileSync(
+        joinPath('./fixtures/image-1.svg')
+      , fs.readFileSync(joinPath('./fixtures/image-1-copy.svg'))
+      );
     });
 
     it('cleans svg files', function (done)
     {
-      var dest = './fixtures/image-1.min.svg';
+      var dest = joinPath('./fixtures/image-1.min.svg');
 
       svgclean(src, dest, compare.bind(null, dest, expected, done));
     });
 
     it('creates the dest path if it doesn\'t exists', function (done)
     {
-      var dest = './fixtures/test/image-1.min.svg';
+      var dest = joinPath('./fixtures/test/image-1.min.svg');
 
       svgclean(src, dest, compare.bind(null, dest, expected, done));
     });
