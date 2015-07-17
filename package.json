@@ -30,7 +30,7 @@
     "url": "https://github.com/HiroAgustin/svgclean.git"
   },
   "scripts": {
-    "test": ""
+    "test": "mocha"
   },
   "dependencies": {
     "coa": "^0.4.1",
